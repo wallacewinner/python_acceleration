@@ -15,27 +15,26 @@ records = [
     {'source': '48-996383697', 'destination': '41-885633788', 'end': 1564627800, 'start': 1564626000}
 ]
 
+call_tax = 0.39
+call_tax_minute = 0.09
 
 def classify_by_phone_number(records):
     for record in records:
-        result = calculate_duration(record['start'], record['end'])   
-        #print(result)
+        total_call = calculate_duration(record['start'], record['end'])   
+        print(total_call)
     pass
 
 def calculate_duration(start, end):
     start_convert = datetime.fromtimestamp(start)
     end_convert = datetime.fromtimestamp(end)
-
     duration = end_convert - start_convert
 
-    if start_convert.hour > 6 and start_convert.hour < 22:  
-        print('diurno-->')  
-        print((int(start_convert.hour)*0.09) + 0.39)
+    if start_convert.hour > 6 and start_convert.hour < 22:    
+        result = ( ( int(duration.total_seconds() / 60) ) * call_tax_minute  + call_tax)
     else:
-        print('noturno-->')
-        print((int(start_convert.hour)* 0 )+0.39)
-    
-    return (int(duration.total_seconds()/60))
+        result = ( ( int(duration.total_seconds() / 60) ) * 0  + call_tax )
+
+    return round(result, 2)
 
 
 (classify_by_phone_number(records))
