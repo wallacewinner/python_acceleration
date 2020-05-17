@@ -51,27 +51,9 @@ records = [{
     'start': 1564626000}]
 
 
-call_tax = 0.36  # fixed tax all calls
-tax_minute = 0.09  # tax to calls during 6 and 22
-call_response = []  # array to save the result
-index = 0
-
-
-def classify_by_phone_number(records):
-    for record in records:
-
-        # cost of the it call
-        total_call = calculate_duration(record['start'], record['end'])
-        # search on array for equals values
-        if search_array(record['source'], index, total_call) is not True:
-            call_response.append({'source': record['source'],
-                                 'total': total_call})
-
-    sorted_list = sorted(call_response, key=lambda k: k['total'], reverse=True)
-    return sorted_list
-
-
 def calculate_duration(start, end):
+    call_tax = 0.36  # fixed tax all calls
+    tax_minute = 0.09  # tax to calls during 6 and 22
     # convert the time
     start_convert = datetime.fromtimestamp(start)
     end_convert = datetime.fromtimestamp(end)
@@ -86,11 +68,27 @@ def calculate_duration(start, end):
     return round(result, 2)
 
 
-def search_array(call, index, total_call):
-    while (index < len(call_response)):
-        if call == call_response[index]['source']:
-            call_response[index]['total'] = round(
-                call_response[index]['total'] + total_call, 2)
+def search_array(call, value, result):
+    index = 0
+    while (index < len(result)):
+        if call == result[index]['source']:
+            result[index]['total'] = round(
+                result[index]['total'] + value, 2)
             return True
         else:
             index = index + 1
+
+
+def classify_by_phone_number(records):
+    result = []  # array to save the result
+    for record in records:
+        # cost of the it call
+        value = calculate_duration(record['start'], record['end'])
+        # search on array for equals values
+        if search_array(record['source'], value, result) is not True:
+            result.append({'source': record['source'], 'total': value})
+
+    return sorted(result, key=lambda k: k['total'], reverse=True)
+
+
+print(classify_by_phone_number(records))
