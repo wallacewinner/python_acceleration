@@ -51,20 +51,24 @@ records = [{
     'start': 1564626000}]
 
 
-call_tax = 0.39  # fixed tax all calls
+call_tax = 0.36  # fixed tax all calls
 tax_minute = 0.09  # tax to calls during 6 and 22
 call_response = []  # array to save the result
+i = 0
 
 
 def classify_by_phone_number(records):
+    
     for record in records:
+
         # cost of the it call
         total_call = calculate_duration(record['start'], record['end'])
         # save the result on array
-        call_response.append({'source': record['source'], 'total': total_call})
-
+        if organiza(record['source'], i, total_call) != True:
+            call_response.append({'source': record['source'], 'total': total_call})
     print(call_response)
-    pass
+    return call_response
+    
 
 
 def calculate_duration(start, end):
@@ -81,5 +85,12 @@ def calculate_duration(start, end):
     # round the result for two decimal points
     return round(result, 2)
 
+def organiza(ligacao, i, total_call):
+    while ( i < len(call_response)):
+        if ligacao == call_response[i]['source']:
+            call_response[i]['total'] = round(call_response[i]['total'] + total_call, 2)
+            return True
+        else:
+            i = i + 1
 
 (classify_by_phone_number(records))
