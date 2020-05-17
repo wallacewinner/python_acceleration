@@ -54,21 +54,21 @@ records = [{
 call_tax = 0.36  # fixed tax all calls
 tax_minute = 0.09  # tax to calls during 6 and 22
 call_response = []  # array to save the result
-i = 0
+index = 0
 
 
 def classify_by_phone_number(records):
-    
     for record in records:
 
         # cost of the it call
         total_call = calculate_duration(record['start'], record['end'])
-        # save the result on array
-        if organiza(record['source'], i, total_call) != True:
-            call_response.append({'source': record['source'], 'total': total_call})
-    print(call_response)
-    return call_response
-    
+        # search on array for equals values
+        if search_array(record['source'], index, total_call) is not True:
+            call_response.append({'source': record['source'],
+                                 'total': total_call})
+
+    sorted_list = sorted(call_response, key=lambda k: k['total'], reverse=True)
+    return sorted_list
 
 
 def calculate_duration(start, end):
@@ -85,12 +85,12 @@ def calculate_duration(start, end):
     # round the result for two decimal points
     return round(result, 2)
 
-def organiza(ligacao, i, total_call):
-    while ( i < len(call_response)):
-        if ligacao == call_response[i]['source']:
-            call_response[i]['total'] = round(call_response[i]['total'] + total_call, 2)
+
+def search_array(call, index, total_call):
+    while (index < len(call_response)):
+        if call == call_response[index]['source']:
+            call_response[index]['total'] = round(
+                call_response[index]['total'] + total_call, 2)
             return True
         else:
-            i = i + 1
-
-(classify_by_phone_number(records))
+            index = index + 1
