@@ -19,28 +19,29 @@ class Employee(ABC):
         self.__code = code
         self.__name = name
         self.__salary = salary
+        self.__hours = 8
 
     @abstractmethod
     def calc_bonus(self):
         return self.__salary * 0.15
 
-    @staticmethod
     def get_hours(self):
-        return 8
+        return self.__hours
 
 
 class Manager(Employee):
     def __init__(self, code, name, salary):
         super().__init__(code, name, salary)
         self.__departament = Department('managers', 1)
+        self.__salary = salary
 
     def calc_bonus(self):
         return self.__salary * 0.15
 
-    def get_departament(self):
+    def get_department(self):
         return self.__departament.name
 
-    def set_departament(self, name):
+    def set_department(self, name):
         self.__departament.name = name
         return True
 
@@ -54,16 +55,16 @@ class Seller(Manager):
     def calc_bonus(self):
         return self.__sales * 0.15
 
-    def get_sale(self):
+    def get_sales(self):
         return self.__sales
 
-    def put_sale(self, sale):
+    def put_sales(self, sale):
         self.__sales += sale
         return True
 
-    def get_departament(self):
+    def get_department(self):
         return self.__departament.name
 
-    def set_departament(self, name):
+    def set_department(self, name):
         self.__departament.name = name
         return True
