@@ -2,9 +2,16 @@
 platform darwin -- Python 3.7.4, pytest-3.6.2, py-1.5.3, pluggy-0.6.0 -- /Users/home/codenation/venv/bin/python
 cachedir: .pytest_cache
 rootdir: /Users/home/codenation/python-10, inifile:
-collecting ... collected 2 items
+collecting ... collected 8 items
 
-test_main.py::TestChallenge10::test_0 PASSED                             [ 50%]
-test_main.py::TestChallenge10::test_01 PASSED                            [100%]
+test_submit.py::TestChallenge10::test_0 PASSED                           [ 12%]
+test_submit.py::TestChallenge10::test_01 PASSED                          [ 25%]
+test_submit.py::TestChallenge10::test_1 PASSED                           [ 37%]
+test_submit.py::TestChallenge10::test_2 PASSED                           [ 50%]
+test_submit.py::TestChallenge10::test_3 PASSED                           [ 62%]
+test_submit.py::TestChallenge10::test_4 PASSED                           [ 75%]
+test_submit.py::TestChallenge10::test_5 PASSED                           [ 87%]
+test_submit.py::TestChallenge10::test_6 PASSED                           [100%]
 
-=========================== 2 passed in 1.51 seconds ===========================
+------- generated xml file: /Users/home/codenation/python-10/output.xml --------
+=========================== 8 passed in 1.20 seconds ===========================

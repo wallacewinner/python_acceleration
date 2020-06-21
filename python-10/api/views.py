@@ -6,8 +6,9 @@ from collections import Counter
 
 @api_view(['POST'])
 def lambda_function(request):
-    data = request.data.get('question')
+    question = request.data.get('question')
 
-    lista = list(Counter(data).elements())
-    list_ordenada = sorted(lista, key=lista.count, reverse=True)
-    return Response({'solution': list_ordenada})
+    table = list(Counter(question).elements())
+    table_ordered = sorted(table, key=table.count, reverse=True)
+    
+    return Response({'solution': table_ordered})
