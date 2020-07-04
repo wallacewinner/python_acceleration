@@ -1,9 +1,15 @@
 from api.models import User, Agent, Event, Group
+from datetime import datetime, timedelta
 
 
 def get_active_users() -> User:
-    """Traga todos os uarios ativos, seu último login deve ser menor que 10 dias """
-    raise NotImplementedError
+    now = datetime.today()
+    active_users = User.objects.filter(
+        last_login_gte = (
+            now - timedelta(10)
+        )
+    )
+    return active_users
 
 
 def get_amount_users() -> User:
