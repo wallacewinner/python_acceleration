@@ -65,4 +65,4 @@ class Event(models.Model):
 
     class Meta:
         ordering = ['date']
-
+        
