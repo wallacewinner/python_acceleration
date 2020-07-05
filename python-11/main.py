@@ -13,8 +13,8 @@ def get_active_users() -> User:
 
 
 def get_amount_users() -> User:
-    """Retorne a quantidade total de usuarios do sistema """
-    raise NotImplementedError
+    all_users = User.objects.count()
+    return all_users
 
 
 def get_admin_users() -> User:
