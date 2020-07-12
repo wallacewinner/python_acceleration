@@ -1,23 +1,21 @@
-
 doc = '''
-#%RAML 1.0
+#%RAML: "1.0"
 title: python-12
 mediaType:  application/json
-baseUri: http://localhost/challengeapi{version}
 version: 0.0.1
 protocols: [HTTP, HTTPS]
+
 securitySchemes:
   JWT:
-    description: API request auth by OAuth 2.0.
-    type: OAuth 2.0
+    description: API request auth by JWT.
+    type: JWT
     describedBy:
       headers:
         Authorization:
           type: string
       responses:
-        400:
-          description: 
-            Unauthorized
+        401:
+          description: Unauthorized
     settings:
       signatures : ['HMAC-SHA256']
 
@@ -107,103 +105,148 @@ types:
 
 /auth/token:
   post:
-    description: show the token
+    description: create new token
     body:
       application/json:
         username: string
         password: string
-    
     responses:
-      200:
+      201:
         body:
-          application/json:
+          application/json: 
             type: Auth
       400:
         body:
-          application/json: 
-              {"error": "Error"}         
+          application/json: {"error": "Error"}    
       
 /agents:
   get:
     description: show all agents
     securedBy: JWT
-    
     responses:
       200:
         body:
-          application/json:
-            example: response {[
-                "agent_id" => 1, 
-                "agent_name" => "Ford"],[
-                "agent_id" => 2, 
-                "agent_name" => "Douglas"],
-                }
+          application/json: Agent[]
       400:
         body:
-          application/json: 
-              {"error": "unauthorized"}
+          application/json: {"error": "Unauthorized"}
   post:
     description: add new agent
     securedBy: JWT
     body:
       application/json:
         properties:
-          name:
-            type: string
-            maxLength: 50
-          status:
-            type: bool
-          environment:
-            type: string
-            maxLength: 20
-          version:
-            type: string
-            maxLength: 5
-          address:
-            type: string
-            maxLength: 39
           example: 
             {"name": "Zaphod",
             "status": true,
             "environment": "MARVIN",
+            "version": "0.0.1",
+            "address": "Terra n 0"
             }  
+    responses:
+      201:
+        body:
+          application/json: Agent[]
+      400:
+        body:
+          application/json: {"error": "Unauthorized"}
             
-
   /{id}:
     get:
       description: search agent by id
       securedBy: JWT
-      responses: 
-        200:
-          body:
-            application/json: 
-                response{agent[]}
-        400:
-          body:
-            application/json: 
-              {"error": "Unauthorized"}
-        404:
-          body:
-            application/json: 
-              {"error": "Bad Request"}
+      responses:
+          200:
+            body:
+              application/json: Agent[]
+          401:
+            body:
+              application/json: {"error": "Unauthorized"}
+          404:
+            body:
+              application/json: {"error": "Bad Request"}
+    put:
+        description: update agent by id
+        securedBy: JWT
+        rresponses:
+          200:
+            body:
+              application/json: Agent[]
+          401:
+            body:
+              application/json: {"error": "Unauthorized"}
+          404:
+            body:
+              application/json: {"error": "Bad Request"}
+    delete:
+        description: remove a agent by id
+        securedBy: JWT
+        responses:
+          200:
+            body:
+              application/json: Agent[]
+          401:
+            body:
+              application/json: {"error": "Unauthorized"}
+          404:
+            body:
+              application/json: {"error": "Bad Request"}
     
   /{id}/events:
-      get:
+    get:
         description: search a event by agent' id
         securedBy: JWT
         responses:
           200:
             body:
-              application/json: 
-                response{Event[]}
-          400:
+              application/json: Event[]
+          401:
             body:
-              application/json: 
-                {"error": "Unauthorized"}
+              application/json: {"error": "Unauthorized"}
           404:
             body:
-              application/json: 
-                {"error": "Bad Request"}
+              application/json: {"error": "Bad Request"}
+    Post:
+        description: add a event by agent' id
+        securedBy: JWT
+        body: 
+            application/json: Event[]
+        responses:
+          201:
+            body:
+              application/json: Event[]
+          401:
+            body:
+              application/json: {"error": "Unauthorized"}
+          404:
+            body:
+              application/json: {"error": "Bad Request"}
+    put:
+        description: update event by agent' id
+        securedBy: JWT
+        responses:
+          200:
+            body:
+              application/json: Event[]
+          401:
+            body:
+              application/json: {"error": "Unauthorized"}
+          404:
+            body:
+              application/json: {"error": "Bad Request"}
+    delete:
+        description: remove a event by agent' id
+        securedBy: JWT
+        responses:
+          200:
+            body:
+              application/json: Event[]
+          401:
+            body:
+              application/json: {"error": "Unauthorized"}
+          404:
+            body:
+              application/json: {"error": "Bad Request"}
         
 /groups:
   get:
@@ -212,42 +255,61 @@ types:
     responses: 
       200:
         body: 
-          application/json,
-                response{Group[]}
-      400:
+          application/json: Group[]
+      401:
         body:
-            application/json:
-              example: 
-                {"error": "unauthorized"}
+            application/json: {"error": "Unauthorized"}
   post:
     description: add new agent
     securedBy: JWT
     body:
       application/json:
         properties:
-          name:
-            type: string
-            maxLength: 20
-          example: {
-              "name": "coracao_de_ouro",
-            }  
+        example: {
+            "name": "coracao_de_ouro",
+        }
+
   /{id}:
     get:
       description: search groups by id
       securedBy: JWT
       responses: 
-        200:
+        201:
           body:
-            application/json, 
-                response{Event[]}
-        400:
+            application/json: Event[]
+        401:
           body:
-            application/json: 
-                {"error": "Unauthorized"}
+            application/json: {"error": "Unauthorized"}
         404:
           body:
-            application/json: 
-              {"error": "Bad Request"}
+            application/json: {"error": "Bad Request"}
+    
+    put:
+        description: update group by id
+        securedBy: JWT
+        responses:
+          200:
+            body:
+              application/json: Group[]
+          401:
+            body:
+              application/json: {"error": "Unauthorized"}
+          404:
+            body:
+              application/json: {"error": "Bad Request"}
+    delete:
+        description: remove a group by id
+        securedBy: JWT
+        responses:
+          200:
+            body:
+              application/json: Group[]
+          401:
+            body:
+              application/json: {"error": "Unauthorized"}
+          404:
+            body:
+              application/json: {"error": "Bad Request"}
     
 /users:
   post:
@@ -274,26 +336,22 @@ types:
             "last_login": "2001-05-11"
             }
     responses:
-      200:
+      201:
         body:
-            application/json, 
-                response{User[]}            
-      400:
+            application/json: User[]            
+      401:
         body:
-            application/json: 
-                {"error": "unauthorized"}
+            application/json: {"error": "Unauthorized"}
   get:
     description: show all users
     securedBy: JWT
     responses:
       200:
         body:
-            application/json, 
-                response{User[]}
-      400:
+            application/json: User[]
+      401:
         body:
-            application/json: 
-              {"error": "unauthorized"}
+            application/json: {"error": "Unauthorized"}
 
   /{id}:
     get: 
@@ -302,14 +360,38 @@ types:
       responses:
         200:
           body:
-            application/json, 
-                response{User[]}
-        400:
+            application/json: User[]
+        401:
           body:
-            application/json: 
-              {"error": "unauthorized"}
+            application/json: {"error": "Unauthorized"}
         404:
           body:
-            application/json: 
-              {"error": "Bad Request"}
+            application/json: {"error": "Bad Request"}
+                  
+    put:
+        description: update user by id
+        securedBy: JWT
+        responses:
+          200:
+            body:
+              application/json: User[]
+          401:
+            body:
+              application/json: {"error": "Unauthorized"}
+          404:
+            body:
+              application/json: {"error": "Bad Request"}
+    delete:
+        description: remove a user by id
+        securedBy: JWT
+        responses:
+          200:
+            body:
+              application/json: User[]
+          401:
+            body:
+              application/json: {"error": "Unauthorized"}
+          404:
+            body:
+              application/json: {"error": "Bad Request"}
 '''
